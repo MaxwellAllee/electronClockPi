@@ -1,0 +1,14 @@
+@font-face{
+    font-family: 'clockFont';
+    src:url('./fonts/clockFont.ttf') format('truetype');
+}
+body{
+    background-color: black;
+    color: whitesmoke;
+}
+#clock{
+    display: flex;
+    justify-content: center;
+    font-family: 'clockFont', sans-serif;
+    font-size: 18em;
+}
