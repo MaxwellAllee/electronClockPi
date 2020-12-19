@@ -1,14 +1,67 @@
-@font-face{
-    font-family: 'clockFont';
-    src:url('./fonts/clockFont.ttf') format('truetype');
+@font-face {
+  font-family: 'clockFont';
+  src: url('./fonts/clockFont.ttf') format('truetype');
 }
-body{
-    background-color: black;
-    color: whitesmoke;
+body {
+  display: flex;
+  flex-direction: column;
+  background-color: black;
+  color: whitesmoke;
+  min-height: 100vh;
+  margin: 0px;
 }
-#clock{
-    display: flex;
-    justify-content: center;
-    font-family: 'clockFont', sans-serif;
-    font-size: 18em;
+#clock {
+  display: flex;
+  justify-content: center;
+  font-family: 'clockFont', sans-serif;
+  font-size: 18em;
+}
+.additionalInfo {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 20% 20% 20% 20% 20%;
+  grid-template-rows: 100%;
+}
+.additionalInfo > div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.weatherHolder {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  font-size: 5rem;
+  font-family: Arial, Helvetica, sans-serif;
+  fill: white;
+}
+.temp{
+  font-size: .75em;
+}
+.weatherHolder .svg{
+  height: 64px;
+  width: 64px;
+  background-color: white;
+}
+.dayHolder{
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+.fiveDay{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: 1rem;
+  font-family: Arial, Helvetica, sans-serif;
+}
+.fiveDay .svg{
+  height: 64px;
+  width: 64px;
+  background-color: white;
+  padding-bottom: 15%;
 }

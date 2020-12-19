@@ -1,0 +1,36 @@
+.rain {
+  -webkit-mask: url(./weatherIcons/rain.svg) no-repeat center;
+  mask: url(./weatherIcons/rain.svg) no-repeat center;
+}
+.snowy {
+  -webkit-mask: url(./weatherIcons/snow.svg) no-repeat center;
+  mask: url(./weatherIcons/snow.svg) no-repeat center;
+}
+.partlyRainy{
+  -webkit-mask: url(./weatherIcons/partlyRainy.svg) no-repeat center;
+  mask: url(./weatherIcons/partlyRainy.svg) no-repeat center;
+}
+.partlyNightRain{
+  -webkit-mask: url(./weatherIcons/partlyNightRain.svg) no-repeat center;
+  mask: url(./weatherIcons/partlyNightRain.svg) no-repeat center;
+}
+.lightning{
+  -webkit-mask: url(./weatherIcons/lightning.svg) no-repeat center;
+  mask: url(./weatherIcons/lightning.svg) no-repeat center;
+}
+.sunny{
+  -webkit-mask: url(./weatherIcons/sunny.svg) no-repeat center;
+  mask: url(./weatherIcons/sunny.svg) no-repeat center;
+}
+.partly{
+  -webkit-mask: url(./weatherIcons/partly.svg) no-repeat center;
+  mask: url(./weatherIcons/partly.svg) no-repeat center;
+}
+.partlyNight{
+  -webkit-mask: url(./weatherIcons/partlyNight.svg) no-repeat center;
+  mask: url(./weatherIcons/partlyNight.svg) no-repeat center;
+}
+.night{
+  -webkit-mask: url(./weatherIcons/night.svg) no-repeat center;
+  mask: url(./weatherIcons/night.svg) no-repeat center;
+}
