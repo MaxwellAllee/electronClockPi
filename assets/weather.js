@@ -1,7 +1,7 @@
 const apiRequest = require('./apiCall');
 
-const weatherId = document.getElementById('weather');
-const weatherGrid = document.querySelector('.additionalInfo');
+// const weatherId = document.getElementById('weather');
+// const weatherGrid = document.querySelector('.additionalInfo');
 const getLatLong = async (zipCode) => apiRequest(
   `https://public.opendatasoft.com/api/records/1.0/search/?dataset=us-zip-code-latitude-and-longitude&q=${zipCode}`,
 );
@@ -11,7 +11,6 @@ const getGlobalWeather = async (zipCode) => {
   return apiRequest(`https://api.weather.gov/points/${lat},${long}`);
 };
 const weatherIcon = (term, day) => {
-  console.log(day);
   if (term.includes('clear') || term.includes('fair')) {
     return day ? 'sunny' : 'night';
   }
@@ -49,6 +48,7 @@ const divCreator = (temp, forecastText, day) => {
 let dayCount;
 let position;
 const fiveDayLoop = (weatherArr) => {
+  const weatherGrid = document.querySelector('.additionalInfo');
   const currentGridBox = weatherGrid.children[dayCount];
   currentGridBox.innerHTML = '';
   const title = document.createElement('h3');
@@ -79,36 +79,31 @@ const fiveDayLoop = (weatherArr) => {
   }
 };
 module.exports = {
-  async fiveDayWeather(globalWeather) {
-    weatherGrid.addEventListener('click', this.reset);
+  async fiveDayWeather(globalWeather, cb) {
+    const weatherGrid = document.querySelector('.additionalInfo');
+    weatherGrid.addEventListener('click', () => {
+      cb();
+    });
     const forecast = await apiRequest(globalWeather.properties.forecast);
     const forecastArr = forecast.properties.periods;
     dayCount = 0;
     position = 0;
-    console.log(forecastArr);
-    fiveDayLoop(forecastArr);
+    fiveDayLoop(forecastArr, weatherGrid);
   },
-  async currentWeather(zipCode) {
+  async currentWeather(zipCode, cb) {
     const globalWeather = await getGlobalWeather(zipCode);
     const hourly = await apiRequest(globalWeather.properties.forecastHourly);
     const currHour = hourly.properties.periods[0];
-    const date = new Date(); // grab date to format to current time.
-    const day = date.getHours() <= 18 && date.getHours() > 6;
     const currForecast = currHour.shortForecast;
     const hourlyTemp = currHour.temperature;
-    const weatherDiv = divCreator(hourlyTemp, currForecast, day);
+    const weatherDiv = divCreator(hourlyTemp, currForecast, currHour.isDaytime);
     weatherDiv.classList.add('weatherHolder');
-    weatherDiv.addEventListener('click', () => {
-      this.fiveDayWeather(globalWeather);
+    weatherDiv.addEventListener('click', (event) => {
+      event.stopPropagation();
+      this.fiveDayWeather(globalWeather, cb);
     });
-    weatherId.appendChild(weatherDiv);
+    const weatherSingle = document.getElementById('weather');
+    weatherSingle.appendChild(weatherDiv);
     // if(hourly.)
-  },
-  reset() {
-    weatherGrid.removeEventListener('click', this.reset);
-    for (let i = 0; i < weatherGrid.childElementCount; i += 1) {
-      weatherGrid.children[i].innerHTML = '';
-    }
-    this.currentWeather(37801);
   },
 };

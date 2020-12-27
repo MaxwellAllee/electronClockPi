@@ -34,3 +34,7 @@
   -webkit-mask: url(./weatherIcons/night.svg) no-repeat center;
   mask: url(./weatherIcons/night.svg) no-repeat center;
 }
+.thunderStorm{
+  -webkit-mask: url(./weatherIcons/night.svg) no-repeat center;
+  mask: url(./weatherIcons/night.svg) no-repeat center;
+}
