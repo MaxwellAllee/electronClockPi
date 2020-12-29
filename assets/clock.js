@@ -3,6 +3,8 @@
 const clock = document.getElementById('clock');
 const Dexie = require('dexie');
 const weather = require('./assets/weather.js');
+
+const userData = {};
 // const invert = 0;
 // const getHourlyWeather = (url) => {
 //   apiRequest(url, (res) => {
@@ -16,33 +18,15 @@ Dexie.debug = true; // In production, set to false to increase performance a lit
 // Declare Database
 //
 const db = new Dexie('userSettings');
-db.version(1).stores({ 'settings': 'zipCode' });
+db.version(3).stores({ settings: 'zipCode,another' });
 
-//
-// Have Fun
-//
-db.transaction('rw', db.userSettings, function* () {
-  // Make sure we have something in DB:
-  if ((yield db.friends.where('zipCode').equals('').count()) === 0) {
-    const id = yield db.friends.add({ 'zipCode': 37801 });
-    alert(`Added zip ${id}`);
-  }
-
-  // Query:
-  const youngFriends = yield db.friends.where('zipCode').toArray();
-
-  // Show result:
-  alert(`My young friends: ${JSON.stringify(youngFriends)}`);
-}).catch((e) => {
-  console.error(e.stack);
-});
 const getTime = () => {
   const date = new Date(); // grab date to format to current time.
   const hour = date.getHours();
   const minutes = date.getMinutes();
   return { hour, minutes };
 };
-
+console.log(win);
 const printTime = () => {
   // invert = invert ? 0 : 1;
   // back = invert ? 'white' : 'black';
@@ -60,11 +44,19 @@ const lowerContent = () => {
     newAdditionalInfo.children[i].innerHTML = '';
   }
   additionalInfo.parentNode.replaceChild(newAdditionalInfo, additionalInfo);
-  weather.currentWeather(37801, lowerContent);
+  weather.currentWeather(userData.zipCode, lowerContent);
 };
 const init = async () => {
   printTime();
   setInterval(() => printTime(), 1000);
   lowerContent();
 };
-init();
+db.transaction('rw', db.settings, async () => {
+  const settings = await db.settings.toArray();
+  if (settings.length) {
+    Object.assign(userData, ...settings);
+    init();
+  } else {
+    document.location.href = `file://${__dirname}/settings.html`;
+  }
+});

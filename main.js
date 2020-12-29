@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-globals */
 // eslint-disable-next-line import/no-extraneous-dependencies
 const { app, BrowserWindow } = require('electron');
 
@@ -11,7 +12,8 @@ function createWindow() {
       enableRemoteModule: true,
     },
   });
-
+  win.myAPI = (text) => console.log(text);
+  console.log(win);
   win.loadFile('index.html');
 }
 
