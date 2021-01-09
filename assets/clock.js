@@ -4,7 +4,7 @@ const clock = document.getElementById('clock');
 const Dexie = require('dexie');
 const weather = require('./assets/weather.js');
 
-const userData = {};
+const primaryUser = { id: '', new: true, asked: false };
 // const invert = 0;
 // const getHourlyWeather = (url) => {
 //   apiRequest(url, (res) => {
@@ -18,15 +18,16 @@ Dexie.debug = true; // In production, set to false to increase performance a lit
 // Declare Database
 //
 const db = new Dexie('userSettings');
-db.version(3).stores({ settings: 'zipCode,another' });
+db.version(3).stores({ settings: 'zipCode,another,asked' });
 
+const button = document.getElementById('button');
 const getTime = () => {
   const date = new Date(); // grab date to format to current time.
   const hour = date.getHours();
   const minutes = date.getMinutes();
   return { hour, minutes };
 };
-console.log(win);
+console.log(window);
 const printTime = () => {
   // invert = invert ? 0 : 1;
   // back = invert ? 'white' : 'black';
@@ -44,19 +45,51 @@ const lowerContent = () => {
     newAdditionalInfo.children[i].innerHTML = '';
   }
   additionalInfo.parentNode.replaceChild(newAdditionalInfo, additionalInfo);
-  weather.currentWeather(userData.zipCode, lowerContent);
+  weather.currentWeather(primaryUser.id, lowerContent);
+};
+
+const open = () => {
+  const modal = document.getElementById('modal');
+  modal.classList.remove('closed');
+  modal.classList.add('open');
+  modal.addEventListener('click', (e) => {
+    if (e.target.id === 'modal') {
+      close();
+    }
+  });
 };
 const init = async () => {
   printTime();
   setInterval(() => printTime(), 1000);
-  lowerContent();
-};
-db.transaction('rw', db.settings, async () => {
-  const settings = await db.settings.toArray();
-  if (settings.length) {
-    Object.assign(userData, ...settings);
-    init();
-  } else {
-    document.location.href = `file://${__dirname}/settings.html`;
+  console.log(primaryUser.asked);
+  if (!primaryUser.asked) {
+    open();
   }
-});
+  if (primaryUser.zipCode !== '00000') {
+    lowerContent();
+  }
+};
+const close = () => {
+  const modal = document.getElementById('modal');
+  modal.classList.remove('open');
+  modal.classList.add('closed');
+  primaryUser.asked = true;
+  init();
+};
+const dbSetup = async () => {
+  console.log(await db.settings.count());
+  if (await db.settings.count() === 0) {
+    db.settings.put({ zipCode: '00000', another: 'test', asked: false }).then((newUser) => {
+      primaryUser.id = newUser;
+      primaryUser.new = true;
+    });
+  } else {
+    const userList = await db.settings.toArray();
+    console.log(userList);
+    primaryUser.id = userList[0].zipCode;
+    primaryUser.asked = userList[0].asked;
+  }
+  init();
+};
+dbSetup();
+button.addEventListener('click', open);
