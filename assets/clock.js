@@ -22,9 +22,9 @@ db.version(4).stores({
   settings: 'zipCode,another,asked',
   alarms: 'time,s,m,t,w,th,f,sa,once',
 });
-  // `db.alarms.put({
-  //   time: '1447', s: false, m: false, t: false, w: false, th: false, f: false, sa: false, once: true,
-  // });`
+db.alarms.put({
+  time: '2358', s: false, m: false, t: false, w: false, th: false, f: false, sa: false, once: true,
+});
 const button = document.getElementById('button');
 const closeButton = document.getElementById('closeButton');
 
