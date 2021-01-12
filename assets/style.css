@@ -84,7 +84,6 @@ body {
 #modal-main{
   
   width: 85vw;
-  height: 85vh;
   background: gray;
   border-radius: 15px;
   padding: 5%;
@@ -92,33 +91,19 @@ body {
 .closeButton{
   display: flex;
   justify-content: flex-end;
-  margin-right: 5%;
   cursor: pointer;
 }
 #zipCodePicker{
   display: flex;
   justify-content: center;
+  height: 28.5%;
 }
-/* .zipInput {
-  display: flex;
-  justify-content: space-around;
-}
-.zipInput input {
-  border: none;
-  border-bottom: 2px solid white;
-  background: transparent;
-  color: white;
-}
-.zipInput input:focus{
-  outline: none;
-} */
 .numberSelector{
   margin-left: 2px;
   margin-right: 2px;
   margin-top: 25px;
   flex-direction: column;
   width: 10%;
-  height: 8%;
   font-size: 2.75rem;
 }
 .numberSelector button{
@@ -144,4 +129,20 @@ body {
 }
 .down{
   border-radius: 0 0 10px 10px;
+}
+.sub{
+  display: flex;
+  width: 20%;
+
+}
+.numChangeSub{
+  border-radius: 10px;
+  height: 100%;
+}
+#topBar{
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  height: 75px;
+  padding-right: 20px;
 }

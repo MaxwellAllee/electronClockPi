@@ -1,16 +1,16 @@
+/* eslint-disable no-undef */
+/* eslint-disable no-use-before-define */
 /* eslint-disable quote-props */
 /* eslint-disable import/no-unresolved */
 const clock = document.getElementById('clock');
 const Dexie = require('dexie');
 const weather = require('./assets/weather.js');
+const alarm = require('./assets/alarm.js');
 
-const primaryUser = { id: '', new: true, asked: false };
-// const invert = 0;
-// const getHourlyWeather = (url) => {
-//   apiRequest(url, (res) => {
-//     console.log(res);
-//   });
-// };
+const primaryUser = {
+  id: '', new: true, asked: false,
+};
+
 // Force debug mode to get async stacks from exceptions.
 Dexie.debug = true; // In production, set to false to increase performance a little.
 
@@ -18,25 +18,28 @@ Dexie.debug = true; // In production, set to false to increase performance a lit
 // Declare Database
 //
 const db = new Dexie('userSettings');
-db.version(3).stores({ settings: 'zipCode,another,asked' });
-
+db.version(4).stores({
+  settings: 'zipCode,another,asked',
+  alarms: 'time,s,m,t,w,th,f,sa,once',
+});
+  // `db.alarms.put({
+  //   time: '1447', s: false, m: false, t: false, w: false, th: false, f: false, sa: false, once: true,
+  // });`
 const button = document.getElementById('button');
-const getTime = () => {
-  const date = new Date(); // grab date to format to current time.
-  const hour = date.getHours();
-  const minutes = date.getMinutes();
-  return { hour, minutes };
+const closeButton = document.getElementById('closeButton');
+
+const alarmSound = async () => {
+  const silenced = alarm.soundTheAlarm();
+  if (silenced) {
+    console.log('alarm silenced');
+  }
 };
-console.log(window);
-const printTime = () => {
-  // invert = invert ? 0 : 1;
-  // back = invert ? 'white' : 'black';
-  // document.getElementsByTagName('BODY')[0].style.filter = `invert(${invert})`;
-  // document.getElementsByTagName('BODY')[0].style.background = back;
-  const { hour, minutes } = getTime();
-  const fixedHour = hour < 10 ? `0${hour}` : hour;
-  const fixedMin = minutes < 10 ? `0${minutes}` : minutes;
-  clock.textContent = `${fixedHour}:${fixedMin}`;
+const printTime = async () => {
+  clock.textContent = moment().format('HH:mm');
+  if (primaryUser.alarm && primaryUser.alarm === moment().format('Hm') && !primaryUser.ringing) {
+    primaryUser.ringing = true;
+    alarmSound();
+  }
 };
 const lowerContent = () => {
   const additionalInfo = document.querySelector('.additionalInfo');
@@ -49,6 +52,8 @@ const lowerContent = () => {
 };
 
 const open = () => {
+  // eslint-disable-next-line no-undef
+  setInit();
   const modal = document.getElementById('modal');
   modal.classList.remove('closed');
   modal.classList.add('open');
@@ -61,7 +66,6 @@ const open = () => {
 const init = async () => {
   printTime();
   setInterval(() => printTime(), 1000);
-  console.log(primaryUser.asked);
   if (!primaryUser.asked) {
     open();
   }
@@ -76,6 +80,10 @@ const close = () => {
   primaryUser.asked = true;
   init();
 };
+const getAlarm = async () => {
+  const nextAlarm = await alarm.getAlarms(db);
+  if (nextAlarm) primaryUser.alarm = nextAlarm;
+};
 const dbSetup = async () => {
   console.log(await db.settings.count());
   if (await db.settings.count() === 0) {
@@ -87,9 +95,12 @@ const dbSetup = async () => {
     const userList = await db.settings.toArray();
     console.log(userList);
     primaryUser.id = userList[0].zipCode;
+    primaryUser.zipCode = userList[0].zipCode;
     primaryUser.asked = userList[0].asked;
+    getAlarm();
   }
   init();
 };
 dbSetup();
+closeButton.addEventListener('click', close);
 button.addEventListener('click', open);

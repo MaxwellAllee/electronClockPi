@@ -103,6 +103,7 @@ module.exports = {
       this.fiveDayWeather(globalWeather, cb);
     });
     const weatherSingle = document.getElementById('weather');
+    weatherSingle.innerHTML = '';
     weatherSingle.appendChild(weatherDiv);
     // if(hourly.)
   },

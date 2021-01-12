@@ -11,8 +11,10 @@
     />
   </head>
   <body>
+    <div id="topBar">
+      <img id="button" src="./assets/images/settings.png" alt="settings cog" width="50px">
+    </div>
     <div id="clock"></div>
-    <button id="button">test</button>
     <div class="additionalInfo">
       <div></div>
       <div></div>
@@ -22,8 +24,8 @@
     </div>
     <div id="modal" class="closed">
       <div id="modal-main">
-        <div class="closeButton" onclick="close">
-          <img src="./assets/images/cancel.png" alt="close png" />
+        <div class="closeButton">
+          <img src="./assets/images/cancel2.png" alt="close png"  id="closeButton" height="50px" />
         </div>
         <div id="zipCodePicker">
           <div class="numberSelector">
@@ -61,10 +63,14 @@
               ⬇
             </button>
           </div>
+          <div class="numberSelector sub">
+            <button class="numChangeSub" id="sub"> Submit </button>
+          </div>
         </div>
-        <button id="sub">submit</button>
       </div>
     </div>
+
+    <script src="./assets/moment.js"></script>
     <script src="./assets/settings.js"></script>
     <script src="./assets/clock.js"></script>
   </body>

@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable no-restricted-globals */
 /* eslint-disable no-undef */
 const clickCount = document.getElementsByClassName('numChange');
@@ -19,8 +20,6 @@ Array.from(clickCount).forEach((button) => button.addEventListener('click', chan
 const sumZip = async () => {
   const newZip = Array.from(zipNum).reduce((total, zipDigit) => total + zipDigit.textContent, '');
   // eslint-disable-next-line no-undef
-  // console.log(newZip, await db.settings.get());
-  console.log(primaryUser.id);
   db.settings.update(primaryUser.id, { zipCode: newZip, asked: true }).then((updated) => {
     if (updated) {
       console.log('updated');
@@ -30,3 +29,11 @@ const sumZip = async () => {
   });
 };
 submit.addEventListener('click', sumZip);
+const setInit = () => {
+  if (primaryUser.zipCode !== '00000') {
+    Array.from(zipNum).forEach((num, i) => {
+      // eslint-disable-next-line no-param-reassign
+      num.textContent = primaryUser.id[i];
+    });
+  }
+};
