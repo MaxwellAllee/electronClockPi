@@ -18,13 +18,13 @@ Dexie.debug = true; // In production, set to false to increase performance a lit
 // Declare Database
 //
 const db = new Dexie('userSettings');
-db.version(4).stores({
+db.version(5).stores({
   settings: 'zipCode,another,asked',
-  alarms: 'time,s,m,t,w,th,f,sa,once',
+  alarms: 'time,Mon,Tue,Wed,Thu,Fri,Sat,Sun,once',
 });
-db.alarms.put({
-  time: '2358', s: false, m: false, t: false, w: false, th: false, f: false, sa: false, once: true,
-});
+// db.alarms.put({
+//   time: '1230', Mon: true, Tue: false, Wed: false, Thu: false, Fri: false, Sat: false, Sun: false, once: false,
+// });
 const button = document.getElementById('button');
 const closeButton = document.getElementById('closeButton');
 
@@ -82,6 +82,7 @@ const close = () => {
 };
 const getAlarm = async () => {
   const nextAlarm = await alarm.getAlarms(db);
+  console.log(nextAlarm);
   if (nextAlarm) primaryUser.alarm = nextAlarm;
 };
 const dbSetup = async () => {
